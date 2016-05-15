@@ -10,17 +10,10 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.book.android.android_book.AddBookActivity">
 
-    <TextView
-        android:text="@string/addb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/txt_addb" />
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/txt_addb">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -91,10 +84,8 @@
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Ajouter"
-            android:id="@+id/add" android:layout_gravity="center_horizontal" android:layout_weight="0.14"
-            style="@android:style/Holo.ButtonBar" android:background="#ff381e"/>
-
+            android:text="@string/add_book"
+            android:id="@+id/add" />
     </LinearLayout>
 
 </RelativeLayout>

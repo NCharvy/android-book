@@ -16,10 +16,12 @@ public class MainActivity extends AppCompatActivity {
         setTitle("Bibliothèque");
     }
 
-    public void goToAddBook() {
-        Intent intent = new Intent();
-        intent.setClass(MainActivity.this, AddBookActivity.class);
+    public void exitApp() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+        finish();
     }
 
     @Override
@@ -35,18 +37,15 @@ public class MainActivity extends AppCompatActivity {
                 /* DO EDIT */
                 return true;
             case R.id.action_add:
-                goToAddBook();
+                /* DO NOTHING */
                 return true;
             case R.id.action_delete:
                 /* DO DELETE */
                 return true;
             case R.id.action_mode_close_button:
                 /* DO EXIT */
-                Intent intent = new Intent(Intent.ACTION_MAIN);
-                intent.addCategory(Intent.CATEGORY_HOME);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
+                exitApp();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
