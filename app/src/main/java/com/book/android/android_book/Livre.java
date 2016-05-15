@@ -1,4 +1,4 @@
-package fr.rizor.android_book;
+package com.book.android.android_book;
 
 /**
  * Creation d'un livre tout simple pour un exemple d'utilisation de SQLite sous Android
