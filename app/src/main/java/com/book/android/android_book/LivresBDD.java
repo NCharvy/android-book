@@ -1,4 +1,4 @@
-package fr.rizor.android_book;
+package com.book.android.android_book;
 
 
 import android.content.ContentValues;

@@ -1,25 +1,18 @@
 package com.book.android.android_book;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+public class AddBookActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_addbook);
 
-        setTitle("Bibliothèque");
-    }
-
-    public void goToAddBook() {
-        Intent intent = new Intent();
-        intent.setClass(MainActivity.this, AddBookActivity.class);
-        startActivity(intent);
+        setTitle("Espace ajout de livre");
     }
 
     @Override
@@ -35,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
                 /* DO EDIT */
                 return true;
             case R.id.action_add:
-                goToAddBook();
+                /* DO ADD */
                 return true;
             case R.id.action_delete:
                 /* DO DELETE */
