@@ -18,4 +18,10 @@
         android:title="Supprimer"
         android:icon="@android:drawable/ic_menu_delete"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_mode_close_button"
+        android:title="Quitter"
+        android:icon="@android:drawable/presence_offline"
+        app:showAsAction="never"/>
 </menu>

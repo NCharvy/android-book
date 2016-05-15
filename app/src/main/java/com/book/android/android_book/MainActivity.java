@@ -1,5 +1,6 @@
 package com.book.android.android_book;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -33,6 +34,12 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_delete:
                 /* DO DELETE */
                 return true;
+            case R.id.action_mode_close_button:
+                /* DO EXIT */
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_HOME);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
