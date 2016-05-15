@@ -36,12 +36,6 @@ public class AddBookActivity extends AppCompatActivity implements View.OnClickLi
         setTitle("Ajout d'un livre");
     }
 
-    public void goToAddBook() {
-        Intent intent = new Intent();
-        intent.setClass(AddBookActivity.this, AddBookActivity.class);
-        startActivity(intent);
-    }
-
     public void goToMain() {
         Intent intent = new Intent();
         intent.setClass(AddBookActivity.this, MainActivity.class);
@@ -61,8 +55,7 @@ public class AddBookActivity extends AppCompatActivity implements View.OnClickLi
                 /* DO EDIT */
                 return true;
             case R.id.action_add:
-                /* DO ADD */
-                goToAddBook();
+                /* DO NOTHING */
                 return true;
             case R.id.action_delete:
                 /* DO DELETE */

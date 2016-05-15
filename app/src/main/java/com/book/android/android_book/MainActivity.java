@@ -16,6 +16,12 @@ public class MainActivity extends AppCompatActivity {
         setTitle("Bibliothèque");
     }
 
+    public void goToAddBook() {
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this, AddBookActivity.class);
+        startActivity(intent);
+    }
+
     public void exitApp() {
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
@@ -37,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
                 /* DO EDIT */
                 return true;
             case R.id.action_add:
-                /* DO NOTHING */
+                /* DO ADD */
+                goToAddBook();
                 return true;
             case R.id.action_delete:
                 /* DO DELETE */
