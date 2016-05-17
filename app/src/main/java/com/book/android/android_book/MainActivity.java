@@ -1,17 +1,39 @@
 package com.book.android.android_book;
 
+import android.app.ListActivity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    private LivresBDD livreBdd;
+    private Button btnTitre, btnIsbn, btnAuteur, btnId;
+    private ArrayList<Livre> biblio;
+    private ListView listBiblio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        livreBdd = new LivresBDD(this);
+        listBiblio = (ListView) findViewById(R.id.list);
+        btnTitre = (Button) findViewById(R.id.btn_titre);
+        btnIsbn = (Button) findViewById(R.id.btn_isbn);
+        btnAuteur = (Button) findViewById(R.id.btn_auteur);
+        btnId = (Button) findViewById(R.id.btn_id);
+        btnTitre.setOnClickListener(this);
+        btnIsbn.setOnClickListener(this);
+        btnAuteur.setOnClickListener(this);
+        btnId.setOnClickListener(this);
 
         setTitle("Bibliothèque");
     }
@@ -55,5 +77,37 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == btnTitre) {
+            livreBdd.open();
+            biblio = livreBdd.touteLaBdByTitre(false);
+            ArrayAdapter<Livre> adapter = new ArrayAdapter<Livre>(MainActivity.this, android.R.layout.simple_list_item_1, biblio);
+            listBiblio.setAdapter(adapter);
+            livreBdd.close();
+        }
+        else if (v == btnIsbn) {
+            livreBdd.open();
+            biblio = livreBdd.touteLaBdByIsbn(false);
+            ArrayAdapter<Livre> adapter = new ArrayAdapter<Livre>(MainActivity.this, android.R.layout.simple_list_item_1, biblio);
+            listBiblio.setAdapter(adapter);
+            livreBdd.close();
+        }
+        else if (v == btnAuteur) {
+            livreBdd.open();
+            biblio = livreBdd.touteLaBdByAuteurs(false);
+            ArrayAdapter<Livre> adapter = new ArrayAdapter<Livre>(MainActivity.this, android.R.layout.simple_list_item_1, biblio);
+            listBiblio.setAdapter(adapter);
+            livreBdd.close();
+        }
+        else if (v == btnId) {
+            livreBdd.open();
+            biblio = livreBdd.touteLaBD();
+            ArrayAdapter<Livre> adapter = new ArrayAdapter<Livre>(MainActivity.this, android.R.layout.simple_list_item_1, biblio);
+            listBiblio.setAdapter(adapter);
+            livreBdd.close();
+        }
     }
 }

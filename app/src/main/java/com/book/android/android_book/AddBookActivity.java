@@ -33,7 +33,7 @@ public class AddBookActivity extends AppCompatActivity implements View.OnClickLi
         etAuteur = (EditText) findViewById(R.id.auteur);
         addButton.setOnClickListener(this);
 
-        setTitle("Ajout d'un livre");
+        setTitle("Ajout de livre");
     }
 
     public void goToMain() {
