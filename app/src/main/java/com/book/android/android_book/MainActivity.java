@@ -45,8 +45,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onItemClick(AdapterView<?> adapter, View v, int pos, long id) {
                         Object o = listBiblio.getItemAtPosition(pos);
-                        String book = o.toString();
-                        Toast.makeText(getApplicationContext(), "Vous avez choisi le livre: " + book, Toast.LENGTH_LONG).show();
+                        Livre livre = (Livre) o;
+                        String isbn = livre.getIsbn().toString();
+                        showBookOnBrowser(isbn);
+                        //Toast.makeText(getApplicationContext(), "Vous avez choisi le livre: " + isbn, Toast.LENGTH_LONG).show();
                     }
                 }
         );
@@ -63,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
         startActivity(intent);
-
     }
 
     public void exitApp() {
