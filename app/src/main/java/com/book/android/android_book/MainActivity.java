@@ -2,9 +2,11 @@ package com.book.android.android_book;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.view.Menu;
@@ -13,6 +15,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private LivresBDD livreBdd;
@@ -36,12 +39,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnId.setOnClickListener(this);
 
         setTitle("Bibliothèque");
+
+        listBiblio.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapter, View v, int pos, long id) {
+                        Object o = listBiblio.getItemAtPosition(pos);
+                        String book = o.toString();
+                        Toast.makeText(getApplicationContext(), "Vous avez choisi le livre: " + book, Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
     }
 
     public void goToAddBook() {
         Intent intent = new Intent();
         intent.setClass(MainActivity.this, AddBookActivity.class);
         startActivity(intent);
+    }
+
+    public void showBookOnBrowser(String isbn){
+        String url = "http://books.google.fr/books?isbn=" + isbn;
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        startActivity(intent);
+
     }
 
     public void exitApp() {
@@ -74,6 +96,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.action_mode_close_button:
                 /* DO EXIT */
                 exitApp();
+                return true;
+            case R.id.action_reinit:
+                /* DO EXIT */
+                livreBdd.open();
+                reinit();
+                livreBdd.close();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -109,5 +137,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             listBiblio.setAdapter(adapter);
             livreBdd.close();
         }
+    }
+
+    public void reinit(){
+        livreBdd.getMaBase().onUpgrade(livreBdd.getBDD(),0,0);
     }
 }

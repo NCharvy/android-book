@@ -20,6 +20,12 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/action_reinit"
+        android:title="Réinitialiser"
+        android:icon="@android:drawable/presence_offline"
+        app:showAsAction="never"/>
+
+    <item
         android:id="@+id/action_mode_close_button"
         android:title="Quitter"
         android:icon="@android:drawable/presence_offline"
