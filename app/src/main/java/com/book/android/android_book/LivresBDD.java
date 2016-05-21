@@ -98,6 +98,16 @@ public class LivresBDD {
 		return cursorToLivre(c);
 	}
 
+	public int getLength(){
+		// Récupère le nombre de livres enregistrés en base de données
+		String countQuery = "SELECT  * FROM " + TABLE_LIVRES;
+		SQLiteDatabase db = maBaseSQLite.getReadableDatabase();
+		Cursor cursor = db.rawQuery(countQuery, null);
+		int nbLivres = cursor.getCount();
+		cursor.close();
+		return nbLivres;
+	}
+
 
 
 	//Cette methode permet de convertir un cursor en un livre

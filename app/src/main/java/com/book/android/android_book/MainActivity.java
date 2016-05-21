@@ -2,6 +2,8 @@ package com.book.android.android_book;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.widget.Button;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -27,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         livreBdd = new LivresBDD(this);
         listBiblio = (ListView) findViewById(R.id.list);
         btnTitre = (Button) findViewById(R.id.btn_titre);
@@ -39,6 +43,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnId.setOnClickListener(this);
 
         setTitle("Bibliothèque");
+
+        // Affiche le nombre de livres enregistrés
+        int nbLivres = livreBdd.getLength();
+        TextView t = (TextView)findViewById(R.id.txt_nb_livres);
+        t.append(String.valueOf(nbLivres));
 
         listBiblio.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
