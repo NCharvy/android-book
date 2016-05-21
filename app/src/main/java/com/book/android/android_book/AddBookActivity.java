@@ -33,7 +33,7 @@ public class AddBookActivity extends AppCompatActivity implements View.OnClickLi
         etAuteur = (EditText) findViewById(R.id.auteur);
         addButton.setOnClickListener(this);
 
-        setTitle("Ajout d'un livre");
+        setTitle("Ajout de livre");
     }
 
     public void goToMain() {
@@ -55,6 +55,12 @@ public class AddBookActivity extends AppCompatActivity implements View.OnClickLi
                 /* DO RETURN TO MAIN */
                 goToMain();
                 return true;
+            case R.id.action_reinit:
+                /* DO EXIT */
+                livreBdd.open();
+                reinit();
+                livreBdd.close();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -70,5 +76,9 @@ public class AddBookActivity extends AppCompatActivity implements View.OnClickLi
             Toast.makeText(this, "Ajout du livre " + livre.getTitre().toString(), Toast.LENGTH_LONG).show();
             livreBdd.close();
         }
+    }
+
+    public void reinit(){
+        livreBdd.getMaBase().onUpgrade(livreBdd.getBDD(),0,0);
     }
 }
