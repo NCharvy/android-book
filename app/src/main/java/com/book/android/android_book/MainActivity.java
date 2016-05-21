@@ -22,6 +22,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void goToEditBook() {
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this, EditBookActivity.class);
+        startActivity(intent);
+    }
+
     public void exitApp() {
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
@@ -41,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         switch(item.getItemId()) {
             case R.id.action_edit:
                 /* DO EDIT */
+                goToEditBook();
                 return true;
             case R.id.action_add:
                 /* DO ADD */

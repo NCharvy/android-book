@@ -44,22 +44,13 @@ public class AddBookActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_only_exit, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.action_edit:
-                /* DO EDIT */
-                return true;
-            case R.id.action_add:
-                /* DO NOTHING */
-                return true;
-            case R.id.action_delete:
-                /* DO DELETE */
-                return true;
             case R.id.action_mode_close_button:
                 /* DO RETURN TO MAIN */
                 goToMain();
