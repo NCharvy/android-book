@@ -10,4 +10,10 @@
     <string name="add_book">Ajouter</string>
     <string name="edit_book">Modifier</string>
     <string name="title_activity_edit_book">EditBookActivity</string>
+    <string name="show_browser">Voir plus de détails</string>
+    <string name="supprimer">Supprimer</string>
+    <string name="ajouter">Ajouter</string>
+    <string name="modifier">Modifier</string>
+    <string name="reinitialiser">Réinitialiser</string>
+    <string name="quitter">Quitter</string>
 </resources>

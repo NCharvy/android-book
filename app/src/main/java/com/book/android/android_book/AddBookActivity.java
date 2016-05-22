@@ -1,10 +1,6 @@
 package com.book.android.android_book;
 
-
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -12,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 public class AddBookActivity extends AppCompatActivity implements View.OnClickListener {
@@ -75,6 +70,7 @@ public class AddBookActivity extends AppCompatActivity implements View.OnClickLi
 
             Toast.makeText(this, "Ajout du livre " + livre.getTitre().toString(), Toast.LENGTH_LONG).show();
             livreBdd.close();
+            goToMain();
         }
     }
 

@@ -1,9 +1,6 @@
 package com.book.android.android_book;
 
-import android.app.ListActivity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,13 +15,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.ListIterator;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private LivresBDD livreBdd;
     private Button btnTitre, btnIsbn, btnAuteur, btnId;
     private ArrayList<Livre> biblio;
     private ListView listBiblio;
+    private ArrayAdapter<Livre> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         livreBdd = new LivresBDD(this);
         listBiblio = (ListView) findViewById(R.id.list);
+        listBiblio.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         btnTitre = (Button) findViewById(R.id.btn_titre);
         btnIsbn = (Button) findViewById(R.id.btn_isbn);
         btnAuteur = (Button) findViewById(R.id.btn_auteur);
@@ -49,18 +47,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         TextView t = (TextView)findViewById(R.id.txt_nb_livres);
         t.append(String.valueOf(nbLivres));
 
-        listBiblio.setOnItemClickListener(
-                new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapter, View v, int pos, long id) {
-                        Object o = listBiblio.getItemAtPosition(pos);
-                        Livre livre = (Livre) o;
-                        String isbn = livre.getIsbn().toString();
-                        showBookOnBrowser(isbn);
-                        //Toast.makeText(getApplicationContext(), "Vous avez choisi le livre: " + isbn, Toast.LENGTH_LONG).show();
-                    }
-                }
-        );
+        //listBiblio.setOnItemClickListener(
+        //        new AdapterView.OnItemClickListener() {
+        //            @Override
+        //            public void onItemClick(AdapterView<?> adapter, View v, int pos, long id) {
+        //            }
+        //        }
+        //);
     }
 
     public void showBookOnBrowser(String isbn) {
@@ -75,9 +68,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(intent);
     }
 
-    public void goToEditBook() {
+    public void goToEditBook(int id) {
         Intent intent = new Intent();
         intent.setClass(MainActivity.this, EditBookActivity.class);
+        intent.putExtra("idLivre", id);
         startActivity(intent);
     }
 
@@ -87,6 +81,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
+    }
+
+    public void reset(){
+        livreBdd.open();
+        livreBdd.getMaBase().onUpgrade(livreBdd.getBDD(),0,0);
+        livreBdd.close();
+    }
+
+    public void deleteLivre(int id) {
+        livreBdd.open();
+        Toast.makeText(getApplicationContext(), "Le livre " + livreBdd.getLivreWithId(id).getTitre() + " a bien été supprimé", Toast.LENGTH_LONG).show();
+        livreBdd.removeLivreWithID(id);
+        adapter.notifyDataSetChanged();
+        livreBdd.close();
     }
 
     @Override
@@ -100,7 +108,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch(item.getItemId()) {
             case R.id.action_edit:
                 /* DO EDIT */
-                goToEditBook();
+                if(listBiblio.getCheckedItemCount() == 0) {
+                    Toast.makeText(getApplicationContext(), "Pour modifier un livre, veuillez le sélectionner", Toast.LENGTH_LONG).show();
+                } else {
+                    Object o = listBiblio.getItemAtPosition(listBiblio.getCheckedItemPosition());
+                    Livre l_to_edit = (Livre) o;
+                    int id = l_to_edit.getId();
+                    goToEditBook(id);
+                }
                 return true;
             case R.id.action_add:
                 /* DO ADD */
@@ -108,16 +123,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return true;
             case R.id.action_delete:
                 /* DO DELETE */
+                if(listBiblio.getCheckedItemCount() == 0) {
+                    Toast.makeText(getApplicationContext(), "Vous devez sélectionner un livre si vous souhaitez le supprimer", Toast.LENGTH_LONG).show();
+                } else {
+                    Object o = listBiblio.getItemAtPosition(listBiblio.getCheckedItemPosition());
+                    Livre l_to_delete = (Livre) o;
+                    int id = l_to_delete.getId();
+                    deleteLivre(id);
+                }
                 return true;
             case R.id.action_mode_close_button:
                 /* DO EXIT */
                 exitApp();
                 return true;
             case R.id.action_reinit:
-                /* DO EXIT */
-                livreBdd.open();
-                reinit();
-                livreBdd.close();
+                /* DO RESET */
+                reset();
+                return true;
+            case R.id.action_show_browser:
+                /* DO SHOW BOOK ON BROWSER */
+                if(listBiblio.getCheckedItemCount() == 0) {
+                    Toast.makeText(getApplicationContext(), "Vous devez d'abord sélectionner un livre", Toast.LENGTH_LONG).show();
+                } else {
+                    Object o = listBiblio.getItemAtPosition(listBiblio.getCheckedItemPosition());
+                    Livre livre = (Livre) o;
+                    String isbn = livre.getIsbn().toString();
+                    showBookOnBrowser(isbn);
+                    Toast.makeText(getApplicationContext(), "Vous avez choisi le livre: " + isbn, Toast.LENGTH_LONG).show();
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -128,34 +161,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (v == btnTitre) {
             livreBdd.open();
             biblio = livreBdd.touteLaBdByTitre(false);
-            ArrayAdapter<Livre> adapter = new ArrayAdapter<Livre>(MainActivity.this, android.R.layout.simple_list_item_1, biblio);
+            adapter = new ArrayAdapter<Livre>(MainActivity.this, android.R.layout.simple_list_item_activated_1, biblio);
             listBiblio.setAdapter(adapter);
             livreBdd.close();
         }
         else if (v == btnIsbn) {
             livreBdd.open();
             biblio = livreBdd.touteLaBdByIsbn(false);
-            ArrayAdapter<Livre> adapter = new ArrayAdapter<Livre>(MainActivity.this, android.R.layout.simple_list_item_1, biblio);
+            adapter = new ArrayAdapter<Livre>(MainActivity.this, android.R.layout.simple_list_item_activated_1, biblio);
             listBiblio.setAdapter(adapter);
             livreBdd.close();
         }
         else if (v == btnAuteur) {
             livreBdd.open();
             biblio = livreBdd.touteLaBdByAuteurs(false);
-            ArrayAdapter<Livre> adapter = new ArrayAdapter<Livre>(MainActivity.this, android.R.layout.simple_list_item_1, biblio);
+            adapter = new ArrayAdapter<Livre>(MainActivity.this, android.R.layout.simple_list_item_activated_1, biblio);
             listBiblio.setAdapter(adapter);
             livreBdd.close();
         }
         else if (v == btnId) {
             livreBdd.open();
             biblio = livreBdd.touteLaBD();
-            ArrayAdapter<Livre> adapter = new ArrayAdapter<Livre>(MainActivity.this, android.R.layout.simple_list_item_1, biblio);
+            adapter = new ArrayAdapter<Livre>(MainActivity.this, android.R.layout.simple_list_item_activated_1, biblio);
             listBiblio.setAdapter(adapter);
             livreBdd.close();
         }
-    }
-
-    public void reinit(){
-        livreBdd.getMaBase().onUpgrade(livreBdd.getBDD(),0,0);
     }
 }
