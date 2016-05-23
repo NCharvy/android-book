@@ -2,6 +2,7 @@ package com.book.android.android_book;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -46,6 +47,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int nbLivres = livreBdd.getLength();
         TextView t = (TextView)findViewById(R.id.txt_nb_livres);
         t.append(String.valueOf(nbLivres));
+
+        livreBdd.open();
+        biblio = livreBdd.touteLaBD();
+        adapter = new ArrayAdapter<Livre>(MainActivity.this, android.R.layout.simple_list_item_activated_1, biblio);
+        listBiblio.setAdapter(adapter);
+        livreBdd.close();
 
         //listBiblio.setOnItemClickListener(
         //        new AdapterView.OnItemClickListener() {
@@ -93,8 +100,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         livreBdd.open();
         Toast.makeText(getApplicationContext(), "Le livre " + livreBdd.getLivreWithId(id).getTitre() + " a bien été supprimé", Toast.LENGTH_LONG).show();
         livreBdd.removeLivreWithID(id);
-        adapter.notifyDataSetChanged();
+        refreshActivity();
         livreBdd.close();
+    }
+
+    public void refreshActivity() {
+        Intent intent = getIntent();
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        finish();
+        overridePendingTransition(0, 0);
+
+        startActivity(intent);
+        overridePendingTransition(0, 0);
     }
 
     @Override
