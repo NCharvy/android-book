@@ -20,13 +20,13 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
             <TextView
-                android:text="@string/btn_titre"
-                android:layout_width="wrap_content"
+                android:text="@string/btn_isbn"
                 android:textSize="20sp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/txt_titre" />
+                android:id="@+id/txt_isbn" />
             <EditText
-                android:id="@+id/titre"
+                android:id="@+id/isbn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -36,6 +36,12 @@
 
                 <requestFocus />
             </EditText>
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_test"
+                android:id="@+id/test_isbn" />
         </LinearLayout>
 
         <LinearLayout
@@ -43,13 +49,13 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
             <TextView
-                android:text="@string/btn_isbn"
-                android:textSize="20sp"
+                android:text="@string/btn_titre"
                 android:layout_width="wrap_content"
+                android:textSize="20sp"
                 android:layout_height="wrap_content"
-                android:id="@+id/txt_isbn" />
+                android:id="@+id/txt_titre" />
             <EditText
-                android:id="@+id/isbn"
+                android:id="@+id/titre"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
