@@ -36,7 +36,7 @@ public class XMLHandler extends DefaultHandler{
         if(local.equals("work")){
             auteur = attrs.getValue("author");
             tvAuteur.setText(auteur);
-            titre = attrs.getValue("titre");
+            titre = attrs.getValue("title");
             tvTitre.setText(titre);
         }
     }

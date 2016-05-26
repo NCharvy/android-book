@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Looper;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -21,6 +23,7 @@ import org.xml.sax.XMLReader;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.logging.Handler;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -39,6 +42,8 @@ public class AddBookActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addbook);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         livreBdd = new LivresBDD(this);
         addButton = (Button) findViewById(R.id.add);
@@ -111,25 +116,34 @@ public class AddBookActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     public void reinit(){
-        livreBdd.getMaBase().onUpgrade(livreBdd.getBDD(),0,0);
+        livreBdd.getMaBase().onUpgrade(livreBdd.getBDD(), 0, 0);
     }
 
-    public void parseXML(String isbn){
-        Toast.makeText(this,"" + isbn + "", Toast.LENGTH_LONG).show();
-        try {
-            System.setProperty("org.xml.sax.driver", "org.xmlpull.v1.sax2.Driver");
-            String url = "http://classify.oclc.org/classify2/Classify?isbn=" + isbn + "&summary=true";
-            APIUrl = new URL(url);
-            SAXParserFactory spf = SAXParserFactory.newInstance();
-            SAXParser sp = spf.newSAXParser();
-            XMLReader xr = sp.getXMLReader();
+    public void parseXML(String isbn) {
+        final String num = isbn;
+        AddBookActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(AddBookActivity.this, num, Toast.LENGTH_LONG).show();
+                try {
+                    System.setProperty("org.xml.sax.driver", "org.xmlpull.v1.sax2.Driver");
+                    String url = "http://classify.oclc.org/classify2/Classify?isbn=" + num + "&summary=true";
+                    APIUrl = new URL(url);
+                    SAXParserFactory spf = SAXParserFactory.newInstance();
+                    SAXParser sp = spf.newSAXParser();
+                    XMLReader xr = sp.getXMLReader();
 
-            xr.setContentHandler(new XMLHandler(AddBookActivity.this));
-            InputSource inp = new InputSource(APIUrl.openStream());
-            xr.parse(inp);
-        }
-        catch(IOException ioe){ Log.e("AddBookActivity", "Input error " + ioe.getMessage()); }
-        catch(SAXException se){ Log.e("AddBookActivity", "SAX error " + se.getMessage()); }
-        catch(ParserConfigurationException pe){ Log.e("AddBookActivity", "Parser error " + pe.getMessage()); }
+                    xr.setContentHandler(new XMLHandler(AddBookActivity.this));
+                    InputSource inp = new InputSource(APIUrl.openStream());
+                    xr.parse(inp);
+                } catch (IOException ioe) {
+                    Log.e("AddBookActivity", "Input error " + ioe.getMessage());
+                } catch (SAXException se) {
+                    Log.e("AddBookActivity", "SAX error " + se.getMessage());
+                } catch (ParserConfigurationException pe) {
+                    Log.e("AddBookActivity", "Parser error " + pe.getMessage());
+                }
+            }
+        });
     }
 }
