@@ -7,6 +7,7 @@
     <string name="btn_isbn">Isbn</string>
     <string name="btn_titre">Titre</string>
     <string name="btn_auteur">Auteur</string>
+    <string name="btn_test">Tester</string>
     <string name="add_book">Ajouter</string>
     <string name="edit_book">Modifier</string>
     <string name="title_activity_edit_book">EditBookActivity</string>

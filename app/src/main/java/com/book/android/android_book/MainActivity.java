@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String url = "http://books.google.fr/books?isbn=" + isbn;
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
+        startActivity(intent);
     }
 
     public void goToAddBook() {
@@ -93,8 +94,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void reset(){
         livreBdd.open();
-        livreBdd.getMaBase().onUpgrade(livreBdd.getBDD(),0,0);
+        livreBdd.getMaBase().onUpgrade(livreBdd.getBDD(), 0, 0);
         livreBdd.close();
+        Toast.makeText(getApplicationContext(), "Base de données réinitialisée !", Toast.LENGTH_LONG).show();
     }
 
     public void deleteLivre(int id) {
@@ -194,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Livre livre = (Livre) o;
                     String isbn = livre.getIsbn().toString();
                     showBookOnBrowser(isbn);
-                    Toast.makeText(getApplicationContext(), "Vous avez choisi le livre: " + isbn, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), "Vous avez choisi le livre: " + isbn, Toast.LENGTH_LONG).show();
                 }
                 return true;
         }
