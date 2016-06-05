@@ -14,6 +14,7 @@
     <string name="supprimer">Supprimer</string>
     <string name="ajouter">Ajouter</string>
     <string name="modifier">Modifier</string>
+    <string name="scanner">Scan</string>
     <string name="reinitialiser">Réinitialiser</string>
     <string name="quitter">Quitter</string>
 </resources>

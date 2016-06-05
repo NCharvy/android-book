@@ -14,8 +14,9 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private LivresBDD livreBdd;
@@ -114,6 +115,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         overridePendingTransition(0, 0);
     }
 
+    public void barcodeScan() {
+        IntentIntegrator scanIntegrator = new IntentIntegrator(this);
+        scanIntegrator.initiateScan();
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        //retrieve scan result
+        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        if (scanningResult != null) {
+            //we have a result
+            String scanContent = scanningResult.getContents();
+            String scanFormat = scanningResult.getFormatName();
+            // now go to addactivity with all informations get by the scan
+            Intent new_intent = new Intent();
+            new_intent.setClass(MainActivity.this, AddBookActivity.class);
+            new_intent.putExtra("scanContent", scanContent);
+            new_intent.putExtra("scanFormat", scanFormat);
+            startActivity(new_intent);
+        } else{
+            Toast.makeText(getApplicationContext(),"No scan data received!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -148,6 +172,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     int id = l_to_delete.getId();
                     deleteLivre(id);
                 }
+                return true;
+            case R.id.action_scan:
+                /* DO SCAN */
+                barcodeScan();
                 return true;
             case R.id.action_mode_close_button:
                 /* DO EXIT */

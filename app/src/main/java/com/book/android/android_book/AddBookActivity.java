@@ -21,10 +21,18 @@ public class AddBookActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addbook);
 
+        Intent intent = getIntent();
+        String scanContent = intent.getStringExtra("scanContent");
+        String scanFormat = intent.getStringExtra("scanFormat");
+
         livreBdd = new LivresBDD(this);
         addButton = (Button) findViewById(R.id.add);
         etTitre = (EditText) findViewById(R.id.titre);
         etIsbn = (EditText) findViewById(R.id.isbn);
+        if (scanContent != null) {
+            etIsbn.setText(scanContent);
+            Toast.makeText(getApplicationContext(), "Scan effectué : Format = " + scanFormat + " Content = " + scanContent, Toast.LENGTH_LONG).show();
+        }
         etAuteur = (EditText) findViewById(R.id.auteur);
         addButton.setOnClickListener(this);
 
