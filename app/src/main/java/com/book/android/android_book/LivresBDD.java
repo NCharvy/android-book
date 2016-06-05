@@ -80,6 +80,12 @@ public class LivresBDD {
 		return bdd.delete(TABLE_LIVRES, COL_ID + " = " +id, null);
 	}
 
+	public Livre getLivreWithId(int id){
+		// Récupère dans un Cursor les valeurs correspondant a un livre contenu dans la BDD (ici on selectionne le livre grace a son id)
+		Cursor c = bdd.query(TABLE_LIVRES, new String[] {COL_ID, COL_ISBN, COL_TITRE,COL_AUTEURS}, COL_ID + " LIKE \"" + id +"\"", null, null, null, null);
+		return cursorToLivre(c);
+	}
+
 	public Livre getFirstLivreWithTitre(String titre){
 		//Recupere dans un Cursor les valeur correspondant a un livre contenu dans la BDD (ici on selectionne le livre grace a son titre)
 		Cursor c = bdd.query(TABLE_LIVRES, new String[] {COL_ID, COL_ISBN, COL_TITRE,COL_AUTEURS}, COL_TITRE + " LIKE \"" + titre +"\"", null, null, null, null);
@@ -96,6 +102,16 @@ public class LivresBDD {
 		//Recuperere dans un Cursor les valeur correspondant a un livre contenu dans la BDD (ici on selectionne le livre grace a son auteur)
 		Cursor c = bdd.query(TABLE_LIVRES, new String[] {COL_ID, COL_ISBN, COL_TITRE,COL_AUTEURS}, COL_AUTEURS + " LIKE \"" + auteur +"\"", null, null, null, null);
 		return cursorToLivre(c);
+	}
+
+	public int getLength(){
+		// Récupère le nombre de livres enregistrés en base de données
+		String countQuery = "SELECT  * FROM " + TABLE_LIVRES;
+		SQLiteDatabase db = maBaseSQLite.getReadableDatabase();
+		Cursor cursor = db.rawQuery(countQuery, null);
+		int nbLivres = cursor.getCount();
+		cursor.close();
+		return nbLivres;
 	}
 
 

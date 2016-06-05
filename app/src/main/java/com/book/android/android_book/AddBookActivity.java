@@ -1,10 +1,6 @@
 package com.book.android.android_book;
 
-
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.StrictMode;
@@ -15,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.xml.sax.InputSource;
@@ -67,22 +62,13 @@ public class AddBookActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_only_exit, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.action_edit:
-                /* DO EDIT */
-                return true;
-            case R.id.action_add:
-                /* DO NOTHING */
-                return true;
-            case R.id.action_delete:
-                /* DO DELETE */
-                return true;
             case R.id.action_mode_close_button:
                 /* DO RETURN TO MAIN */
                 goToMain();
@@ -100,16 +86,25 @@ public class AddBookActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         if (v == addButton) {
-            livre = new Livre(1, etIsbn.getText().toString(), etTitre.getText().toString(), etAuteur.getText().toString());
-            livreBdd.open();
-            livreBdd.insertLivre(livre);
-            livre = livreBdd.getFirstLivreWithTitre(etTitre.getText().toString());
+            if(etIsbn.getText().toString().equals("") || etTitre.getText().toString().equals("") || etAuteur.getText().toString().equals("")){
+                Toast.makeText(this, "Il manque des informations pour l'ajout du livre !", Toast.LENGTH_LONG).show();
+            }
+            else {
+                livre = new Livre(1, etIsbn.getText().toString(), etTitre.getText().toString(), etAuteur.getText().toString());
+                livreBdd.open();
+                livreBdd.insertLivre(livre);
+                livre = livreBdd.getFirstLivreWithTitre(etTitre.getText().toString());
 
-            Toast.makeText(this, "Ajout du livre " + livre.getTitre().toString(), Toast.LENGTH_LONG).show();
-            livreBdd.close();
+                Toast.makeText(this, "Ajout du livre " + livre.getTitre().toString(), Toast.LENGTH_LONG).show();
+                livreBdd.close();
+                goToMain();
+            }
         }
         else if(v == testButton){
-            if(etIsbn.getText() != null){
+            if(etIsbn.getText().toString().equals("")){
+                Toast.makeText(this, "Veuillez entrer un ISBN !", Toast.LENGTH_LONG).show();
+            }
+            else{
                 parseXML(etIsbn.getText().toString());
             }
         }
@@ -124,7 +119,6 @@ public class AddBookActivity extends AppCompatActivity implements View.OnClickLi
         AddBookActivity.this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(AddBookActivity.this, num, Toast.LENGTH_LONG).show();
                 try {
                     System.setProperty("org.xml.sax.driver", "org.xmlpull.v1.sax2.Driver");
                     String url = "http://classify.oclc.org/classify2/Classify?isbn=" + num + "&summary=true";
@@ -136,6 +130,12 @@ public class AddBookActivity extends AppCompatActivity implements View.OnClickLi
                     xr.setContentHandler(new XMLHandler(AddBookActivity.this));
                     InputSource inp = new InputSource(APIUrl.openStream());
                     xr.parse(inp);
+                    if(etTitre.getText().toString().equals("") && etAuteur.getText().toString().equals("")){
+                        Toast.makeText(AddBookActivity.this, "Le livre n'a pas été trouvé !", Toast.LENGTH_LONG).show();
+                    }
+                    else if(etTitre.getText().toString().equals("") || etAuteur.getText().toString().equals("")){
+                        Toast.makeText(AddBookActivity.this, "Il manque des informations au livre !", Toast.LENGTH_LONG).show();
+                    }
                 } catch (IOException ioe) {
                     Log.e("AddBookActivity", "Input error " + ioe.getMessage());
                 } catch (SAXException se) {

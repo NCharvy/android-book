@@ -3,31 +3,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_add"
-        android:title="Ajouter"
+        android:title="@string/ajouter"
         android:icon="@android:drawable/ic_menu_add"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_edit"
-        android:title="Modifier"
+        android:title="@string/modifier"
         android:icon="@android:drawable/ic_menu_edit"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_delete"
-        android:title="Supprimer"
+        android:title="@string/supprimer"
         android:icon="@android:drawable/ic_menu_delete"
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/action_show_browser"
+        android:title="@string/show_browser"
+        android:icon="@android:drawable/presence_offline"
+        app:showAsAction="never"/>
+
+    <item
         android:id="@+id/action_reinit"
-        android:title="Réinitialiser"
+        android:title="@string/reinitialiser"
         android:icon="@android:drawable/presence_offline"
         app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_mode_close_button"
-        android:title="Quitter"
+        android:title="@string/quitter"
         android:icon="@android:drawable/presence_offline"
         app:showAsAction="never"/>
 </menu>
